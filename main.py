@@ -21,16 +21,32 @@ def add_book():
 def remove_book(id):
     pass
 
-def search_book(id=None, name=None, author=None):
-    pass
+def _print_books(books):
+    print("")
+    for i in books:
+        print(f"({i[0]}) {i[1]}, By {i[2]} ${i[3]}")
+    print("")
+
+
+def _search_book(val, classifier):
+    sql = f"SELECT * from books WHERE {classifier}=%s"
+    cursor.execute(sql, (val, ))
+    return [i for i in cursor]
+
+def search_book():
+    print("\nSearch with \n1) ID \n2) Name \n3) Author")
+    command = input("> ")
+    if command not in ["1", "2", "3"]:
+        print("Invalid Input")
+        return
+    classifier = ["id", "name", "author"][int(command)-1]
+    val = input("Enter query > ")
+    books = _search_book(val, classifier)
+    _print_books(books)
 
 def show_books():
     cursor.execute("SELECT * from books")
-    # mydb.commit()
-    print("")
-    for i in cursor:
-        print(f"({i[0]}) {i[1]}, By {i[2]} ${i[3]}")
-    print("")
+    _print_books(cursor)
 
 book_management = [add_book, remove_book, search_book, show_books]
 
