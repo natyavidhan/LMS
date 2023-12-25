@@ -9,18 +9,6 @@ mydb = mysql.connector.connect(
 
 cursor = mydb.cursor()
 
-def add_book():
-    name = input("Book name: ")
-    author = input("Author name: ")
-    price = input("Price: ")
-    sql = "INSERT INTO books (name, author, price) VALUE (%s, %s, %s)"
-    values = (name, author, price)
-    cursor.execute(sql, values)
-    mydb.commit()
-
-def remove_book(id):
-    pass
-
 def _print_books(books):
     print("")
     for i in books:
@@ -32,6 +20,20 @@ def _search_book(val, classifier):
     sql = f"SELECT * from books WHERE {classifier}=%s"
     cursor.execute(sql, (val, ))
     return [i for i in cursor]
+
+def add_book():
+    name = input("Book name: ")
+    author = input("Author name: ")
+    price = input("Price: ")
+    sql = "INSERT INTO books (name, author, price) VALUE (%s, %s, %s)"
+    values = (name, author, price)
+    cursor.execute(sql, values)
+    mydb.commit()
+
+def remove_book():
+    command = input("Enter Book ID > ")
+    sql = "DELETE from books WHERE id=%s"
+    cursor.execute(sql, (command, ))
 
 def search_book():
     print("\nSearch with \n1) ID \n2) Name \n3) Author")
