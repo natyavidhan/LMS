@@ -9,15 +9,15 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-# mycursor.execute("DROP TABLE books")
-# mycursor.execute("DROP TABLE issues")
-# mycursor.execute("DROP TABLE transactions")
+mycursor.execute("DROP TABLE books")
+mycursor.execute("DROP TABLE issues")
+mycursor.execute("DROP TABLE transactions")
 
 mycursor.execute("""CREATE TABLE books (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         name VARCHAR(255), 
                         author VARCHAR(255), 
-                        price VARCHAR(255)
+                        price INT
                 )""")
 
 mycursor.execute("""CREATE TABLE issues (
