@@ -14,7 +14,6 @@ def _print_books(books):
     print("")
     for i in books:
         print(f"({i[0]}) {i[1]}, By {i[2]} ${i[3]}")
-    print("")
 
 def _search_book(val, classifier):
     sql = f"SELECT * from books WHERE {classifier}=%s"
@@ -98,7 +97,6 @@ def show_issues():
     for i in issues:
         book = _search_book(i[2], "id")[0]
         print(f"({i[0]}) {book[1]}, Issued By {i[1]} on {i[3]} for {i[4]} days ({'Returned' if i[5] else 'Not Returned'})")
-    print("")
 
 def check_dues():
     issues = _get_issues()
@@ -109,10 +107,19 @@ def check_dues():
             if datetime.date.today() > date:
                 book = _search_book(i[2], "id")[0]
                 print(f"({i[0]}) {book[1]}, Issued By {i[1]} on {i[3]} for {i[4]} days ({'Returned' if i[5] else 'Not Returned'})")
-    print("")
+
+def new_transaction():
+    pass
+
+def transaction_history():
+    pass
+
+def show_transaction():
+    pass
 
 book_management = [add_book, remove_book, search_book, show_books]
 book_issues = [issue_book, return_book, show_issues, check_dues]
+transactions = [new_transaction, transaction_history, show_transaction]
 
 command = ""
 
@@ -137,7 +144,7 @@ while command!="exit":
         command = int(command)-1
         book_management[command]()
 
-    if command == "2":
+    elif command == "2":
         print("\nBook issues")
         print("1) Issue Book \n2) Book Return \n3) Show All \n4) Check Dues \n5) Back")
 
@@ -150,3 +157,17 @@ while command!="exit":
 
         command = int(command)-1
         book_issues[command]()
+
+    elif command == "3":
+        print("\nTransactions")
+        print("1) New Transaction \n2) Transaction History \n3) Show Transaction \n4) Back")
+
+        command = input("> ")
+        if command not in ["1", "2", "3", "4"]:
+            print("Invalid Command")
+            continue
+        if command == "4":
+            continue
+
+        command = int(command)-1
+        transactions[command]()

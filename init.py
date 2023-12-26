@@ -32,6 +32,6 @@ mycursor.execute("""CREATE TABLE issues (
 mycursor.execute("""CREATE TABLE transactions (
                     id INT AUTO_INCREMENT PRIMARY KEY, 
                     student VARCHAR(255), 
-                    book_id INT, 
+                    book_ids VARCHAR(255), 
                     purchased_on DATE
                 )""")
