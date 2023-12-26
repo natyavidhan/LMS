@@ -126,7 +126,21 @@ def transaction_history():
         print(f"({i[0]}) {i[1]} purchased {len(json.loads(i[2]))} Book(s) on {i[3]}")
 
 def show_transaction():
-    pass
+    id = input("Enter Transaction ID > ")
+    cursor.execute("SELECT * FROM transactions WHERE id=%s", (id, ))
+    trs = [i for i in cursor]
+    if len(trs) == 0:
+        print("Invalid Transaction ID")
+        show_transaction()
+        return
+    tr = trs[0]
+    books = [_search_book(i, "id")[0] for i in json.loads(tr[2])]
+    print(f"{tr[1]} purchased follwoing Book(s) on {tr[3]}")
+    _print_books(books)
+    total = 0
+    for i in books:
+        total+=i[3]
+    print(f"\nTotal purchase of: ${total}")
 
 book_management = [add_book, remove_book, search_book, show_books]
 book_issues = [issue_book, return_book, show_issues, check_dues]
