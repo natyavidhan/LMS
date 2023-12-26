@@ -25,7 +25,8 @@ mycursor.execute("""CREATE TABLE issues (
                     student VARCHAR(255), 
                     book_id INT, 
                     issued_on DATE, 
-                    return_in INT
+                    return_in INT,
+                    returned BOOL DEFAULT FALSE
                 )""")
 
 mycursor.execute("""CREATE TABLE transactions (

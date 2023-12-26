@@ -1,5 +1,4 @@
 import mysql.connector
-from datetime import datetime
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -72,28 +71,33 @@ def issue_book():
         return
     name = input("Student Name > ")
     ret = input("Return in (days) > ")
-    date = datetime.now().strftime("%Y-%m-%d")
-    sql = "INSERT INTO issues (student, book_id, issued_on, return_in) VALUES (%s, %s, %s, %s)"
-    cursor.execute(sql, (name, book[0], date, ret))
+    sql = "INSERT INTO issues (student, book_id, issued_on, return_in) VALUES (%s, %s, CURDATE(), %s)"
+    cursor.execute(sql, (name, book[0], ret))
     mydb.commit()
 
 def return_book():
     pass
 
-def show_dues():
-    pass
+def show_issues():
+    sql = "SELECT * from issues"
+    cursor.execute(sql)
+    print("")
+    for i in cursor:
+        book = _search_book(i[2], "id")[0]
+        print(f"({i[0]}) {book[1]}, Issued By {i[1]} on {i[3]} for {i[4]} days ({'Returned' if i[5] else 'Not Returned'})")
+    print("")
 
 def check_dues():
     pass
 
 book_management = [add_book, remove_book, search_book, show_books]
-book_issues = [issue_book, return_book, show_dues, check_dues]
+book_issues = [issue_book, return_book, show_issues, check_dues]
 
 command = ""
 
 while command!="exit":
 
-    print("Library Management System")
+    print("\nLibrary Management System")
     print("1) Books management \n2) Book Issues \n3) Transactions")
 
     command = input("> ")
