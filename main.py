@@ -112,15 +112,18 @@ def check_dues():
 def new_transaction():
     student = input("Student Name > ")
     amt = int(input("Number of books purchased > "))
-    books = []
-    for i in range(amt):
-        books.append(input(f"Enter Book {i+1} ID > "))
+    books = [input(f"Enter Book {i+1} ID > ") for i in range(amt)]
     books_str = json.dumps(books)
+
     sql = "INSERT INTO transactions (student, book_ids, purchased_on) VALUES (%s, %s, CURDATE())"
     cursor.execute(sql, (student, books_str))
+    mydb.commit()
 
 def transaction_history():
-    pass
+    sql = "SELECT * FROM transactions"
+    cursor.execute(sql)
+    for i in cursor:
+        print(f"({i[0]}) {i[1]} purchased {len(json.loads(i[2]))} Book(s) on {i[3]}")
 
 def show_transaction():
     pass
