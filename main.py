@@ -1,4 +1,5 @@
 import mysql.connector
+from datetime import datetime
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -56,7 +57,25 @@ def show_books():
     _print_books(cursor)
 
 def issue_book():
-    pass
+    command = input("Book ID > ")
+    book = _search_book(command, "id")
+    if len(book) == 0:
+        print(f"Book with ID {command} not found")
+        issue_book()
+        return
+    book = book[0]
+    print(f"{book[1]}, By {book[2]} ${book[3]}")
+    print("Is this the correct book?")
+    command = input("(y/n) > ")
+    if command == "n":
+        issue_book()
+        return
+    name = input("Student Name > ")
+    ret = input("Return in (days) > ")
+    date = datetime.now().strftime("%Y-%m-%d")
+    sql = "INSERT INTO issues (student, book_id, issued_on, return_in) VALUES (%s, %s, %s, %s)"
+    cursor.execute(sql, (name, book[0], date, ret))
+    mydb.commit()
 
 def return_book():
     pass
@@ -81,11 +100,13 @@ while command!="exit":
 
     if command == "1":
         print("\nBooks Management")
-        print("1) Add Book \n2) Remove Books \n3) Search \n4) Show All Books")
+        print("1) Add Book \n2) Remove Books \n3) Search \n4) Show All \n5) Back")
 
         command = input("> ")
-        if command not in ["1", "2", "3", "4"]:
+        if command not in ["1", "2", "3", "4", "5"]:
             print("Invalid Command")
+            continue
+        if command == "5":
             continue
 
         command = int(command)-1
@@ -93,11 +114,13 @@ while command!="exit":
 
     if command == "2":
         print("\nBook issues")
-        print("1) Issue Book \n2) Book Return \n3) Show All \n4) Check Dues")
+        print("1) Issue Book \n2) Book Return \n3) Show All \n4) Check Dues \n5) Back")
 
         command = input("> ")
-        if command not in ["1", "2", "3", "4"]:
+        if command not in ["1", "2", "3", "4", "5"]:
             print("Invalid Command")
+            continue
+        if command == "5":
             continue
 
         command = int(command)-1
