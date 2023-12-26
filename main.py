@@ -1,5 +1,6 @@
 import mysql.connector
 import datetime
+import json
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -109,7 +110,14 @@ def check_dues():
                 print(f"({i[0]}) {book[1]}, Issued By {i[1]} on {i[3]} for {i[4]} days ({'Returned' if i[5] else 'Not Returned'})")
 
 def new_transaction():
-    pass
+    student = input("Student Name > ")
+    amt = int(input("Number of books purchased > "))
+    books = []
+    for i in range(amt):
+        books.append(input(f"Enter Book {i+1} ID > "))
+    books_str = json.dumps(books)
+    sql = "INSERT INTO transactions (student, book_ids, purchased_on) VALUES (%s, %s, CURDATE())"
+    cursor.execute(sql, (student, books_str))
 
 def transaction_history():
     pass
