@@ -76,13 +76,25 @@ def issue_book():
     mydb.commit()
 
 def return_book():
-    pass
+    issue_id = input("Issue ID > ")
+    cursor.execute("SELECT * from issues WHERE id=%s", (issue_id, ))
+    issues = [i for i in cursor]
+    if len(issues) == 0:
+        print("Invalid ID")
+        return_book()
+        return
+    issue = issues[0]
+    if issue[5]:
+        print("Book already Returned")
+        return
+    sql = "UPDATE issues SET returned=True WHERE id=%s"
+    cursor.execute(sql, (issue_id, ))
+    mydb.commit()
 
 def show_issues():
-    sql = "SELECT * from issues"
-    cursor.execute(sql)
+    issues = _get_dues()
     print("")
-    for i in cursor:
+    for i in issues:
         book = _search_book(i[2], "id")[0]
         print(f"({i[0]}) {book[1]}, Issued By {i[1]} on {i[3]} for {i[4]} days ({'Returned' if i[5] else 'Not Returned'})")
     print("")
