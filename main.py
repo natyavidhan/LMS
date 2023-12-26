@@ -1,4 +1,5 @@
 import mysql.connector
+import datetime
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -20,7 +21,7 @@ def _search_book(val, classifier):
     cursor.execute(sql, (val, ))
     return [i for i in cursor]
 
-def _get_dues():
+def _get_issues():
     sql = "SELECT * from issues"
     cursor.execute(sql)
     return [i for i in cursor]
@@ -92,7 +93,7 @@ def return_book():
     mydb.commit()
 
 def show_issues():
-    issues = _get_dues()
+    issues = _get_issues()
     print("")
     for i in issues:
         book = _search_book(i[2], "id")[0]
@@ -100,7 +101,15 @@ def show_issues():
     print("")
 
 def check_dues():
-    pass
+    issues = _get_issues()
+    print("")
+    for i in issues:
+        date = i[3]+datetime.timedelta(days=int(i[4]))
+        if not i[5]:
+            if datetime.date.today() > date:
+                book = _search_book(i[2], "id")[0]
+                print(f"({i[0]}) {book[1]}, Issued By {i[1]} on {i[3]} for {i[4]} days ({'Returned' if i[5] else 'Not Returned'})")
+    print("")
 
 book_management = [add_book, remove_book, search_book, show_books]
 book_issues = [issue_book, return_book, show_issues, check_dues]
