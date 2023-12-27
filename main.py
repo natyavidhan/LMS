@@ -104,7 +104,7 @@ def show_transaction():
         return
     tr = trs[0]
     books = [_search_book(i, "id")[0] for i in json.loads(tr[2])]
-    print(f"{tr[1]} purchased follwoing Book(s) on {tr[3]}")
+    print(f"{tr[1]} purchased following Book(s) on {tr[3]}")
     _print_books(books)
     total = sum([i[3] for i in books])
     print(f"\nTotal purchase of: ${total}")
@@ -126,7 +126,9 @@ while command!="exit":
         print("1) Add Book \n2) Remove Books \n3) Search \n4) Show All \n5) Back")
 
         command = input("> ")
-        if command not in ["1", "2", "3", "4", "5"] or command == "5":print("Invalid Command" if command!="5" else ""); continue
+        if command not in ["1", "2", "3", "4", "5"] or command == "5":
+            print("Invalid Command" if command!="5" else "")
+            continue
 
         book_management[int(command)-1]()
 
@@ -135,7 +137,9 @@ while command!="exit":
         print("1) Issue Book \n2) Book Return \n3) Show All \n4) Check Dues \n5) Back")
 
         command = input("> ")
-        if command not in ["1", "2", "3", "4", "5"] or command == "5": print("Invalid Command" if command!="5" else ""); continue
+        if command not in ["1", "2", "3", "4", "5"] or command == "5": 
+            print("Invalid Command" if command!="5" else "")
+            continue
 
         book_issues[int(command)-1]()
 
@@ -144,6 +148,8 @@ while command!="exit":
         print("1) New Transaction \n2) Transaction History \n3) Show Transaction \n4) Back")
 
         command = input("> ")
-        if command not in ["1", "2", "3", "4"] or command == "4": print("Invalid Command" if command!="4" else ""); continue
+        if command not in ["1", "2", "3", "4"] or command == "4": 
+            print("Invalid Command" if command!="4" else "")
+            continue
 
         transactions[int(command)-1]()
